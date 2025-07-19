@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.productsManagement.demo.exception.NameAlreadyRegisteredException;
+import com.productsManagement.demo.exception.NameIsNotStringException;
 import com.productsManagement.demo.exception.ProductNotFoundException;
 import com.productsManagement.demo.models.Product;
 import com.productsManagement.demo.repository.ProductRepository;
@@ -23,6 +24,12 @@ public class ProductService {
 		
 		if(productRepeat.isPresent()) {
 			throw new NameAlreadyRegisteredException();
+		}
+		if(product.getName().matches(".*\\d.*")) {
+			throw new NameIsNotStringException();
+		}
+		if(product.getDescription().matches(".*\\d.*")) {
+			throw new NameIsNotStringException();
 		}
 		
 		product.setCreated_at(LocalDateTime.now());
