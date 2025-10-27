@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.productsManagement.demo.dto.ProductRequest;
 import com.productsManagement.demo.models.Product;
@@ -19,12 +20,13 @@ import com.productsManagement.demo.service.ProductService;
 import jakarta.validation.Valid;
 
 @RestController
+@RequestMapping("/products")
 public class Controller {
 	
 	@Autowired
 	ProductService service;
 	
-	@PostMapping("/products/save")
+	@PostMapping()
 	public ResponseEntity<Product> saveProduct(@Valid @RequestBody ProductRequest productDto){
 		Product product = new Product();
 		product = productDto.cast(product);
@@ -33,19 +35,19 @@ public class Controller {
 		return ResponseEntity.status(HttpStatus.CREATED).body(product);
 	}
 	
-	@GetMapping("/products")
+	@GetMapping()
 	public List<Product> allProducts(){
 		return service.findAll();
 	}
 	
-	@GetMapping("/products/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Product> findProduct(@PathVariable long id){
 		Product product = service.findById(id);
 		
 		return ResponseEntity.status(HttpStatus.FOUND).body(product);
 	}
 	
-	@PutMapping("/products/edit/{id}")
+	@PutMapping()
 	public ResponseEntity<Product> editProduct(@PathVariable long id, @Valid @RequestBody ProductRequest productDto){
 		Product product = service.findById(id);
 		product = productDto.cast(product);
@@ -56,7 +58,7 @@ public class Controller {
 		
 	}
 	
-	@DeleteMapping("/products/delete/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteProduct(@PathVariable long id){
 		service.deleteProduct(id);
 		
